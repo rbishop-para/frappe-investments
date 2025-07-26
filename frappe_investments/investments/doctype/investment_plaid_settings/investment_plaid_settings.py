@@ -143,9 +143,12 @@ def add_investment_accounts(response, institution, company):
 				gl_account.insert(ignore_if_duplicate=True)
 
 				# Create income and expense accounts
+				# Find proper income parent - look for Income Account type first, then Income, then any Income/Expense root
 				income_parent = frappe.db.get_value("Account", {"company": company, "account_type": "Income Account", "is_group": 1})
 				if not income_parent:
-					income_parent = frappe.db.get_value("Account", {"company": company, "is_group": 1})
+					income_parent = frappe.db.get_value("Account", {"company": company, "root_type": "Income", "is_group": 1})
+				if not income_parent:
+					frappe.throw(_("Please create an Income Account group in your Chart of Accounts for company {0}").format(company))
 				
 				income_account = frappe.get_doc(
 					{
@@ -158,9 +161,12 @@ def add_investment_accounts(response, institution, company):
 				)
 				income_account.insert(ignore_if_duplicate=True)
 
+				# Find proper expense parent - look for Expense Account type first, then Expense, then any Income/Expense root
 				expense_parent = frappe.db.get_value("Account", {"company": company, "account_type": "Expense Account", "is_group": 1})
 				if not expense_parent:
-					expense_parent = frappe.db.get_value("Account", {"company": company, "is_group": 1})
+					expense_parent = frappe.db.get_value("Account", {"company": company, "root_type": "Expense", "is_group": 1})
+				if not expense_parent:
+					frappe.throw(_("Please create an Expense Account group in your Chart of Accounts for company {0}").format(company))
 				
 				expense_account = frappe.get_doc(
 					{
@@ -224,8 +230,13 @@ def sync_investment_values(investment_account_name):
 			frappe.log_error(f"Could not get current value for investment account {investment_account_name}")
 			return
 
-		# Get the current GL account balance
-		gl_balance = frappe.db.get_value("Account", investment_account.gl_account, "account_balance") or 0
+		# Get the current GL account balance using the proper helper function
+		from erpnext.accounts.utils import get_balance_on
+		gl_balance = get_balance_on(
+			account=investment_account.gl_account,
+			date=None,  # Get current balance
+			company=investment_account.company
+		)
 		
 		# Calculate the pure investment change (excluding transfers)
 		last_sync_balance = investment_account.last_sync_balance or 0
@@ -300,7 +311,7 @@ def create_investment_gl_entry(investment_account, change_amount, current_value)
 	
 	journal_entry = frappe.get_doc({
 		"doctype": "Journal Entry",
-		"voucher_type": "Investment Adjustment",
+		"voucher_type": "Journal Entry",
 		"posting_date": today(),
 		"company": investment_account.company,
 		"user_remark": f"Investment value adjustment for {investment_account.account_name}",
