@@ -1,0 +1,115 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-26 20:07:57.057411",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "account_name",
+  "investment_institution",
+  "investment_account_type",
+  "company",
+  "gl_account",
+  "last_sync_date",
+  "account_for_income",
+  "account_for_losses",
+  "last_sync_balance",
+  "enabled",
+  "plaid_account_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "account_name",
+   "fieldtype": "Data",
+   "label": "Account Name"
+  },
+  {
+   "fieldname": "investment_institution",
+   "fieldtype": "Link",
+   "label": "Investment Institution",
+   "options": "Investment Institution"
+  },
+  {
+   "fieldname": "investment_account_type",
+   "fieldtype": "Link",
+   "label": "Investment Account Type",
+   "options": "Investment Account Type"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "gl_account",
+   "fieldtype": "Link",
+   "label": "GL Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "last_sync_date",
+   "fieldtype": "Datetime",
+   "label": "Last Sync Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "account_for_income",
+   "fieldtype": "Link",
+   "label": "Account for Income",
+   "options": "Account"
+  },
+  {
+   "fieldname": "account_for_losses",
+   "fieldtype": "Link",
+   "label": "Account for Losses",
+   "options": "Account"
+  },
+  {
+   "fieldname": "last_sync_balance",
+   "fieldtype": "Currency",
+   "label": "Last Sync Balance",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "plaid_account_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Plaid Account ID",
+   "no_copy": 1,
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-26 20:14:53.759317",
+ "modified_by": "Administrator",
+ "module": "Investments",
+ "name": "Investment Account",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

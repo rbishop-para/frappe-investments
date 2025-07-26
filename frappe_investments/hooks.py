@@ -148,23 +148,11 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"frappe_investments.tasks.all"
-# 	],
-# 	"daily": [
-# 		"frappe_investments.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"frappe_investments.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"frappe_investments.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"frappe_investments.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"frappe_investments.investments.doctype.investment_plaid_settings.investment_plaid_settings.automatic_investment_synchronization"
+	],
+}
 
 # Testing
 # -------

@@ -1,0 +1,69 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-26 20:11:34.492836",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "automatic_sync",
+  "plaid_client_id",
+  "plaid_secret",
+  "plaid_env"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "default": "0",
+   "fieldname": "automatic_sync",
+   "fieldtype": "Check",
+   "label": "Automatic Sync"
+  },
+  {
+   "fieldname": "plaid_client_id",
+   "fieldtype": "Data",
+   "label": "Plaid Client ID"
+  },
+  {
+   "fieldname": "plaid_secret",
+   "fieldtype": "Password",
+   "label": "Plaid Secret"
+  },
+  {
+   "fieldname": "plaid_env",
+   "fieldtype": "Select",
+   "label": "Plaid Env",
+   "options": "sandbox\ndevelopment\nproduction"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-26 20:12:46.406134",
+ "modified_by": "Administrator",
+ "module": "Investments",
+ "name": "Investment Plaid Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
