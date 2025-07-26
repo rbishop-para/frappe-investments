@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:account_type",
  "creation": "2025-07-26 20:07:16.629442",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -12,7 +13,8 @@
   {
    "fieldname": "account_type",
    "fieldtype": "Data",
-   "label": "Account Type"
+   "label": "Account Type",
+   "unique": 1
   },
   {
    "fieldname": "description",
@@ -23,10 +25,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-26 20:07:43.063598",
+ "modified": "2025-07-26 20:47:48.874189",
  "modified_by": "Administrator",
  "module": "Investments",
  "name": "Investment Account Type",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

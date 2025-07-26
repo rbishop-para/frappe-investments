@@ -66,17 +66,20 @@ class InvestmentPlaidConnector:
 	def get_investment_accounts(self):
 		"""Get investment accounts from Plaid"""
 		try:
+			frappe.logger().info(f"Getting investment accounts with access token: {self.access_token[:20]}...")
 			response = self.client.Accounts.get(access_token=self.access_token)
 			# Filter for investment accounts only
 			investment_accounts = [
 				account for account in response["accounts"] 
 				if account.get("type") == "investment"
 			]
+			frappe.logger().info(f"Found {len(investment_accounts)} investment accounts")
 			return investment_accounts
 		except ItemError as e:
+			frappe.logger().error(f"Plaid ItemError: {str(e)}")
 			raise e
-		except Exception:
-			frappe.log_error("Plaid: Investment accounts sync error")
+		except Exception as e:
+			frappe.logger().error(f"Plaid: Investment accounts sync error: {str(e)}")
 			return []
 
 	def get_investment_holdings(self, account_id):

@@ -1,0 +1,79 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"N5cppbtJ_Q\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Investments</span>\",\"col\":12}},{\"id\":\"y1ZerEYTK2\",\"type\":\"card\",\"data\":{\"card_name\":\"Setup\",\"col\":4}}]",
+ "creation": "2025-07-26 20:27:32.375002",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "money-coins-1",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Investments",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setup",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Investment Institution",
+   "link_count": 0,
+   "link_to": "Investment Institution",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Investment Account Type",
+   "link_count": 0,
+   "link_to": "Investment Account Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Investment Account",
+   "link_count": 0,
+   "link_to": "Investment Account",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Investment Plaid Settings",
+   "link_count": 0,
+   "link_to": "Investment Plaid Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2025-07-26 20:28:49.335841",
+ "modified_by": "Administrator",
+ "module": "Investments",
+ "name": "Investments",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 30.0,
+ "shortcuts": [],
+ "title": "Investments"
+}

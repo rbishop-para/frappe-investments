@@ -83,23 +83,46 @@ def add_investment_accounts(response, institution, company):
 	except TypeError:
 		pass
 
+	# Handle institution parameter - it could be a string, dict, or document object
 	if isinstance(institution, str):
 		institution = json.loads(institution)
+	
+	# If institution is a document object, convert to dict
+	if hasattr(institution, 'as_dict'):
+		institution = institution.as_dict()
+	
+	frappe.logger().info(f"Processing institution: {institution}")
 	result = []
 
-	# Get parent GL account for investments
+	# Get parent GL account for investments - try to find a suitable parent
 	parent_gl_account = frappe.db.get_all(
-		"Account", {"company": company, "account_type": "Asset", "is_group": 1, "disabled": 0}
+		"Account", 
+		{"company": company, "account_type": "Current Asset", "is_group": 1, "disabled": 0},
+		limit=1
 	)
+	
+	# If no Current Asset group found, try to find any suitable parent
+	if not parent_gl_account:
+		parent_gl_account = frappe.db.get_all(
+			"Account", 
+			{"company": company, "is_group": 1, "disabled": 0},
+			limit=1
+		)
+	
 	if not parent_gl_account:
 		frappe.throw(
 			_(
-				"Please setup and enable a group account with the Account Type - {0} for the company {1}"
-			).format(frappe.bold(_("Asset")), company)
+				"Please setup and enable at least one group account for the company {0}. "
+				"Go to Chart of Accounts and create a group account first."
+			).format(company)
 		)
 
-	plaid = InvestmentPlaidConnector(institution.plaid_access_token)
+	# Get the institution document to properly retrieve the password field
+	institution_doc = frappe.get_doc("Investment Institution", institution["institution_name"])
+	plaid = InvestmentPlaidConnector(institution_doc.get_password("plaid_access_token"))
 	investment_accounts = plaid.get_investment_accounts()
+	
+	frappe.logger().info(f"Found {len(investment_accounts)} investment accounts from Plaid")
 
 	for account in investment_accounts:
 		account_name = f"{account['name']} - {institution['institution_name']}"
@@ -113,30 +136,38 @@ def add_investment_accounts(response, institution, company):
 						"doctype": "Account",
 						"account_name": account["name"] + " - " + response["institution"]["name"],
 						"parent_account": parent_gl_account[0].name,
-						"account_type": "Asset",
+						"account_type": "Current Asset",
 						"company": company,
 					}
 				)
 				gl_account.insert(ignore_if_duplicate=True)
 
 				# Create income and expense accounts
+				income_parent = frappe.db.get_value("Account", {"company": company, "account_type": "Income Account", "is_group": 1})
+				if not income_parent:
+					income_parent = frappe.db.get_value("Account", {"company": company, "is_group": 1})
+				
 				income_account = frappe.get_doc(
 					{
 						"doctype": "Account",
 						"account_name": f"Investment Income - {account['name']}",
-						"parent_account": frappe.db.get_value("Account", {"company": company, "account_type": "Income", "is_group": 1}),
-						"account_type": "Income",
+						"parent_account": income_parent,
+						"account_type": "Income Account",
 						"company": company,
 					}
 				)
 				income_account.insert(ignore_if_duplicate=True)
 
+				expense_parent = frappe.db.get_value("Account", {"company": company, "account_type": "Expense Account", "is_group": 1})
+				if not expense_parent:
+					expense_parent = frappe.db.get_value("Account", {"company": company, "is_group": 1})
+				
 				expense_account = frappe.get_doc(
 					{
 						"doctype": "Account",
 						"account_name": f"Investment Loss - {account['name']}",
-						"parent_account": frappe.db.get_value("Account", {"company": company, "account_type": "Expense", "is_group": 1}),
-						"account_type": "Expense",
+						"parent_account": expense_parent,
+						"account_type": "Expense Account",
 						"company": company,
 					}
 				)
@@ -164,10 +195,10 @@ def add_investment_accounts(response, institution, company):
 						account["name"]
 					)
 				)
-			except Exception:
-				frappe.log_error("Investment Plaid Link Error")
+			except Exception as e:
+				frappe.log_error(f"Investment Plaid Link Error: {str(e)}")
 				frappe.throw(
-					_("There was an error creating Investment Account while linking with Plaid."),
+					_("There was an error creating Investment Account while linking with Plaid: {0}").format(str(e)),
 					title=_("Investment Plaid Link Failed"),
 				)
 
@@ -181,8 +212,9 @@ def sync_investment_values(investment_account_name):
 	if not investment_account.enabled:
 		return
 
+	institution_doc = frappe.get_doc("Investment Institution", investment_account.investment_institution)
 	plaid = InvestmentPlaidConnector(
-		frappe.db.get_value("Investment Institution", investment_account.investment_institution, "plaid_access_token")
+		institution_doc.get_password("plaid_access_token")
 	)
 
 	try:

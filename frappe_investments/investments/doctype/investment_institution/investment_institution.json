@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:institution_name",
  "creation": "2025-07-26 19:51:15.592260",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -13,7 +14,8 @@
   {
    "fieldname": "institution_name",
    "fieldtype": "Data",
-   "label": "Institution Name"
+   "label": "Institution Name",
+   "unique": 1
   },
   {
    "fieldname": "plaid_access_token",
@@ -30,10 +32,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-26 20:06:46.068866",
+ "modified": "2025-07-26 20:47:19.065670",
  "modified_by": "Administrator",
  "module": "Investments",
  "name": "Investment Institution",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
